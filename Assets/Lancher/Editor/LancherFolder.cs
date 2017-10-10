@@ -7,7 +7,7 @@ namespace Lancher
         public enum TYPE
         {
             PREFABS,
-            TXT,
+            CONFIG,
         }
 
         public string mFolder = "Assets";

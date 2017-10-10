@@ -5,5 +5,9 @@
             <mFolder>Assets/Lancher/tmp</mFolder>
             <mType>PREFABS</mType>
         </LancherFolder>
+        <LancherFolder>
+            <mFolder>Assets/Lancher/tmp2</mFolder>
+            <mType>CONFIG</mType>
+        </LancherFolder>
     </mFolders>
 </LancherFolders>
