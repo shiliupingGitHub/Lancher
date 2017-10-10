@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using System.IO;
 namespace Lancher
 {
     public class LancherFolders
     {
-        List<LancherFolder> mFolders = new List<LancherFolder>();
+       public List<LancherFolder> mFolders = new List<LancherFolder>();
         void DrawFolders()
         {
             EditorGUILayout.BeginFadeGroup(1);
@@ -38,10 +39,19 @@ namespace Lancher
             {
                 mFolders.Remove(r);
             }
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("add" ,GUILayout.MaxWidth(100)))
             {
                 mFolders.Add(new LancherFolder());
             }
+            if (GUILayout.Button("save", GUILayout.MaxWidth(100)))
+            {
+               string p = LancherEditor.Instance.ConfigPath;
+                string content = XmlHelper.XmlSerialize(this, System.Text.Encoding.UTF8);
+                File.WriteAllText(p, content);
+                //XmlHelper.XmlSerializeToFile(this, p, System.Text.Encoding.UTF8);
+            }
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndFadeGroup();
         }
         void DrawBuild()
@@ -49,17 +59,66 @@ namespace Lancher
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("BuildPc", GUILayout.MaxWidth(100)))
             {
-
+                BuildBundle(BuildTarget.StandaloneWindows);
             }
             if (GUILayout.Button("BuildAndroid", GUILayout.MaxWidth(100)))
             {
-
+                BuildBundle(BuildTarget.Android);
             }
             if (GUILayout.Button("BuildIOS", GUILayout.MaxWidth(100)))
             {
-
+                BuildBundle(BuildTarget.iOS);
             }
             EditorGUILayout.EndHorizontal();
+        }
+       void BuildBundle(BuildTarget bt)
+        {
+          string path=  EditorUtility.SaveFolderPanel(string.Empty, string.Empty, string.Empty);
+          if(!string.IsNullOrEmpty(path))
+            {
+                List<AssetBundleBuild> abs = new List<AssetBundleBuild>();
+                List<LancherFolder> mtxtFolders = new List<LancherFolder>();
+                foreach (var f in mFolders)
+                {
+                    switch (f.mType)
+                    {
+                        case LancherFolder.TYPE.PREFABS:
+                            {
+                               string[] files= Directory.GetFiles(f.mFolder);
+                                foreach(var file in files)
+                                {
+                                    if (!file.EndsWith(".prefab"))
+                                        continue;
+                                   string szName = Path.GetFileNameWithoutExtension(file);
+                                    AssetBundleBuild ab = new AssetBundleBuild();
+                                    ab.assetBundleName = szName;
+                                    ab.assetNames = new string[] { file };
+                                    abs.Add(ab);
+                                }
+                            }
+                            break;
+                        case LancherFolder.TYPE.TXT:
+                            {
+                                mtxtFolders.Add(f);
+                            }
+                            break;
+                    }
+
+                    
+                    
+                    
+                }
+                string tempPath = Application.dataPath.Substring(0, Application.dataPath.Length - 6) +"tmp";
+                if(Directory.Exists(tempPath))
+                {
+                    Directory.Delete(tempPath, true);
+                }
+                Directory.CreateDirectory(tempPath);
+                AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(tempPath, abs.ToArray(), BuildAssetBundleOptions.None, bt);
+
+            }
+
+
         }
        public void Draw()
         {

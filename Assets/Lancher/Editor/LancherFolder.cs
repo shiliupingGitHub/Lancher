@@ -6,12 +6,12 @@ namespace Lancher
     {
         public enum TYPE
         {
-            BUNDLE,
-            UNBUNDLE,
+            PREFABS,
+            TXT,
         }
 
         public string mFolder = "Assets";
-        public TYPE mType = TYPE.BUNDLE;
+        public TYPE mType = TYPE.PREFABS;
     }
 }
 

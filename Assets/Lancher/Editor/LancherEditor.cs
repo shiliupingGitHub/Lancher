@@ -16,7 +16,7 @@ namespace Lancher
             Instance = GetWindow<LancherEditor>();
             Instance.LoadConfig();
         }
-        string ConfigPath
+       public string ConfigPath
         {
             get
             {

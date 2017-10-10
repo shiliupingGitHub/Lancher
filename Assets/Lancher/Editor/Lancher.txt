@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LancherFolders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <mFolders>
+        <LancherFolder>
+            <mFolder>Assets/Lancher/tmp</mFolder>
+            <mType>PREFABS</mType>
+        </LancherFolder>
+    </mFolders>
+</LancherFolders>
