@@ -27,6 +27,7 @@ namespace Lancher
         DownloadWeb mDownloader = null;
         string mUrl;
         string mLocal;
+        DownloaderAnchor mAnchor;
         Dictionary<string, Bundle> mRemoteBundle = new Dictionary<string, Bundle>();
         Dictionary<string, Bundle> mLocalBundle = new Dictionary<string, Bundle>();
         List< Bundle> mDownderBundle = new List<Bundle>();
@@ -49,8 +50,8 @@ namespace Lancher
             mUrl = url;
             mLocal = local;
             GameObject dc = new GameObject("DownloaderAnchor");
-            DownloaderAnchor anchor = dc.AddComponent<DownloaderAnchor>();
-            anchor.mDownload = this;
+            DownloaderAnchor mAnchor = dc.AddComponent<DownloaderAnchor>();
+            mAnchor.mDownload = this;
             mStatus = STATUS.OBTAIN_URL;
         }
         public void Update()
@@ -85,6 +86,7 @@ namespace Lancher
                     mStatus = STATUS.NONE;
                     if (null != mOnFinish)
                         mOnFinish(mRemoteBundle, null);
+                    GameObject.Destroy(mAnchor.gameObject);
                 }
                 else
                 {
